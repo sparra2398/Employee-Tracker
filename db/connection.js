@@ -6,8 +6,8 @@ const db = mysql.createConnection(
       user: 'root',
       password: 'root',
       database: 'employee_db'
-    },
-    console.log(`Connected to the employee_db database.`)
+    }
+    
   );
 
   module.exports = db;

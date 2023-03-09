@@ -11,7 +11,8 @@ const mainMenu = () => {
     }).then(answer => {
         if (answer.task === "View Departments") {
             viewDepartments()
-        } else if (answer.task === "View Roles") {
+        } 
+        else if (answer.task === "View Roles") {
             viewRoles()
         } else if (answer.task === "View Employees") {
             viewEmployees()
@@ -33,29 +34,31 @@ const viewDepartments = () => {
             return;
         }
         console.table(rows)
+        mainMenu()
     })
 };
 
 const viewRoles = () => {
-    // I am presented with the job title, role id, the department that role belongs to, and the salary for that role
-    const sql = "SELECT * FROM role"
+    const sql = "SELECT role.title, role.id, department.name, role.salary FROM role LEFT JOIN department ON role.department_id = department.id"
     db.query(sql, (err, rows) => {
         if (err) {
             console.log(err)
             return;
         }
         console.table(rows)
+        mainMenu()
     })
 }
 const viewEmployees = () => {
     // THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
-    const sql = "SELECT * FROM employee"
+    const sql = "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id FROM employee LEFT JOIN role ON employee.role_id = role.id"
     db.query(sql, (err, rows) => {
         if (err) {
             console.log(err)
             return;
         }
         console.table(rows)
+        mainMenu()
     })
 }
 const addDepartment = () => {
@@ -63,22 +66,23 @@ const addDepartment = () => {
         console.log(answer)
         let answerObject = { name: answer.department }
         let sql = "INSERT INTO department SET ?"
+        mainMenu()
     })
 }
 const addRole = () => { 
     inquirer.prompt({ type: "input", name: "role", message: "Enter your role name." }).then(answer => {
         console.log(answer)
-        let answerObject = { name: answer.department }
+        let answerObject = { name: answer.role }
         let sql = "INSERT INTO role SET ?"
+        mainMenu()
     })
 }
 const addEmployee = () => { 
-    //questions: do I need first and last name separate?
-    //--//why are answerObject and sql not defined and what do I need to do to define them?
-    inquirer.prompt({ type: "input", name: "employee", message: "Enter your employee name." }).then(answer => {
+    inquirer.prompt({ type: "input", name: "firstName", message: "Enter your employee's first name." }, { type: "input", name: "lastName", message: "Enter your employee's last name." }).then(answer => {
         console.log(answer)
-        let answerObject = { name: answer.department }
+        let answerObject = { name: answer.employee }
         let sql = "INSERT INTO employee SET ?"
+        mainMenu()
     })
 }
 
